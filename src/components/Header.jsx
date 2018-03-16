@@ -20,7 +20,7 @@ const flex = {
   fontSize: '3vw',
   marginTop: '1vw',
   fontFamily: 'Crimson Text',
-  textTransform: 'uppercase',
+
 };
 const menuButton = {
   marginLeft: -12,
@@ -52,12 +52,13 @@ const styles = theme => ({
 
 const SimpleModal = (props) => {
   const { classes } = props;
+  console.log(props);
   return (
     <Modal
       aria-labelledby="Support"
       aria-describedby="Contact information for support"
       open={props.open}
-      onClose={props.handleCloseModal}
+      onClick={props.handleCloseModal}
     >
       <div style={getModalStyle()} className={classes.paper}>
         <Typography variant="title" id="modal-title">
@@ -67,7 +68,7 @@ const SimpleModal = (props) => {
           <br />
             Having trouble?<br />
             Please send us an email at:<br />
-          <a href="mailto:support@teaching2lead.com?subject=I'm having trouble with...">support@teaching2lead.com</a>
+          <a href="mailto:support@macleanlifecoaching.com?subject=I'm having trouble with...">support@macleanlifecoaching.com</a>
         </Typography>
       </div>
     </Modal>
@@ -177,6 +178,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
   }
 
   handleDrawerToggle = () => {
@@ -190,6 +192,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
   };
 
   handleOpenModal = () => {
+    console.log('hamdleOpenModule clicked');
     this.setState({ open: true });
   };
 
@@ -270,7 +273,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
     const drawer = (
       <div>
         <nav className="display-item xxx-mobile">
-          <ProgramMenu lessons={this.props.lessons} userWeek={this.props.userWeek} onSelectModule={this.props.onSelectModule} />
+          <ProgramMenu lessons={this.props.lessons} userWeek={this.props.userWeek} onSelectModule={this.props.onSelectModule} onClick={this.handleDrawerToggle} />
         </nav>
       </div>
     );
@@ -308,10 +311,10 @@ export default class Header extends React.Component { // eslint-disable-line rea
         </AppBar>
 
         {/* SUPPORT MODAL */}
-        <SupportModal open={this.state.open} handleOpenModal={this.handleOpenModal} handleCloseModal={this.handleCloseModal} />
+        <SupportModal open={this.state.open} handleCloseModal={this.handleCloseModal} />
 
         {/* USER ADMIN DRAWER */}
-        <Drawer anchor="right" open={this.state.user} onClose={this.toggleDrawer('user', false)}>
+        <Drawer anchor="right" open={this.state.user} onClick={this.toggleDrawer('user', false)}>
           <div
             className="admin users"
             tabIndex={0}
@@ -322,7 +325,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
         </Drawer>
 
         {/* CONTENT ADMIN DRAWER */}
-        <Drawer anchor="right" open={this.state.content} onClose={this.toggleDrawer('content', false)}>
+        <Drawer anchor="right" open={this.state.content} onClick={this.toggleDrawer('content', false)}>
           <div
             className="admin modules"
             tabIndex={0}
@@ -341,7 +344,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
             classes={{
                         paper: classes.drawerPaper,
                     }}
-            onClose={this.handleDrawerToggle}
+            onClick={this.handleDrawerToggle}
             ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}
