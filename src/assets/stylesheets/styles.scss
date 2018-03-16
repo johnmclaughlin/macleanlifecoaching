@@ -1,0 +1,160 @@
+body {
+  font-family: 'Asap',Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+  margin: 0;
+  background-color:rgb(221, 221, 221);
+}
+
+header .wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+  h5 {
+    margin-top: 5px;
+  }
+}
+
+header .controls {
+  display: flex;
+}
+
+nav {
+  width: 100%;
+
+  &.desktop {
+    display: none;
+
+    @media only screen and (min-width: "960px") { 
+      display: block;
+      width: 30%;
+    }
+  }
+  
+  & > div:first-of-type {
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    border-radius: 2px;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+    span {
+      padding-left: 15px;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+  }
+}
+
+.container {
+  display: flex;
+
+  &__video {
+    position:relative;
+    padding-bottom:56.25%;
+    padding-top:30px;
+    height:0;
+    overflow:hidden;
+    margin: 20px 0;
+
+    iframe {
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+    }
+  }
+}
+
+.button__menu {
+  display: block;
+
+  @media only screen and (min-width: "960px") { 
+    display: none;
+  }
+}
+
+.toolbar.material-icons {
+  color: white;
+  transition: all 0.5s ease;
+
+  &:hover {
+    opacity: .7;
+    transition: all 0.5s ease;
+  }
+}
+
+.content {
+  width: 100%;
+  padding: 30px 20px;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-radius: 2px;
+
+  @media only screen and (min-width: "960px") { 
+    width: 70%;
+    margin-left: 20px; 
+  }
+
+  &__unauthenticated {
+    width: 100%;
+    margin-left: 0;
+    padding: 30px 20px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    border-radius: 2px;
+  }
+
+  h2 {
+    margin: 0;
+  }
+  h4 {
+    margin: 3px 0 15px 0;
+
+  }
+}
+
+.control {
+  display: none;
+}
+
+.chapter {
+  margin-left: 20px;
+}
+
+header .desktop {
+    display: none;
+
+    @media only screen and (min-width: "960px") { 
+      display: block;
+      width: 70%; 
+      margin-top: -10px;
+      font-size: 2.25vw;
+    }
+  }
+
+.admin {
+  width: 80vw;
+
+  &.user {
+
+  }
+  &.content {
+
+  }
+}

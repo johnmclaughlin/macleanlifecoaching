@@ -1,0 +1,54 @@
+{
+  "lessons" : {
+    "w01" : {
+      "id" : 1,
+      "modules" : {
+        "m01" : {
+          "description" : " ",
+          "ref" : "w01m01",
+          "subtitle" : "This is a subtitle",
+          "title" : "EOS - Emotional Operating System",
+          "videoRef" : "Da-2h2B4faU"
+        },
+        "m02" : {
+          "description" : " ",
+          "ref" : "w01m02",
+          "subtitle" : "Dipping. What are you feeling now? (Neutral witnessing)",
+          "title" : "Exercise 1",
+          "videoRef" : "JQVmkDUkZT4"
+        }
+      },
+      "title" : "Module 1: EOS - Emotional Operating System",
+      "week" : 1
+    },
+    "w02" : {
+      "id" : 2,
+      "modules" : {
+        "m01" : {
+          "description" : "Book reference – Step 2 See and Free<br \/><br \/>Your body is sensing all the time, and\n\nConscious body sensing\n\nBody energy sensing\n\nYour body loves your attention like a child loves a parent’s (pg93)\n\nGiving energy shape and form\n\nMoving into the energy, notice how the emotions change by simply moving into them. Emotions intensify with resistance, dissipate with embrace\n\nReceiving thoughts, feelings, and Images",
+          "ref" : "w02m01",
+          "subtitle" : "This is a subtitle",
+          "title" : "Body sensing",
+          "videoRef" : "MjdpR-TY6QU"
+        },
+        "m02" : {
+          "description" : "Dipping, body sensing, body sensed image, moving into the image, sensing the thoughts, feelings and images inside the form",
+          "ref" : "w02m02",
+          "subtitle" : "This is a subtitle",
+          "title" : "Exercise 2",
+          "videoRef" : "UjtOGPJ0URM"
+        }
+      },
+      "title" : "Module 2: Body sensing",
+      "week" : 2
+    }
+  },
+  "users" : {
+    "sdcrZTCLf65RpFNIvBKNrVSEgG3f2" : {
+      "displayName" : "john mclaughlin",
+      "email" : "john.n.mclaughlin@gmail.com",
+      "role" : "admin",
+      "startDate" : 1521205465594
+    }
+  }
+}

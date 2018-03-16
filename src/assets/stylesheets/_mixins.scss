@@ -1,0 +1,13 @@
+// Sass mixin for creating media query breakpoints on-the-fly
+// https://coderwall.com/p/brz5-g
+@mixin respond-to($breakpoint) {
+    @media only screen and (min-width: $breakpoint) { @content; }
+}
+
+
+// Mixins for Rem Font Sizing
+// a variation of http://css-tricks.com/snippets/css/less-mixin-for-rem-font-sizing/
+@mixin rem($property,$sizeValue: 1.6) {
+    #{$property} : ($sizeValue * 10) + px;
+    #{$property} : $sizeValue + rem;
+}
