@@ -58,7 +58,7 @@ const SimpleModal = (props) => {
       aria-labelledby="Support"
       aria-describedby="Contact information for support"
       open={props.open}
-      onClick={props.handleCloseModal}
+      onClose={props.handleCloseModal}
     >
       <div style={getModalStyle()} className={classes.paper}>
         <Typography variant="title" id="modal-title">
@@ -314,18 +314,18 @@ export default class Header extends React.Component { // eslint-disable-line rea
         <SupportModal open={this.state.open} handleCloseModal={this.handleCloseModal} />
 
         {/* USER ADMIN DRAWER */}
-        <Drawer anchor="right" open={this.state.user} onClick={this.toggleDrawer('user', false)}>
+        <Drawer anchor="right" open={this.state.user} onClose={this.toggleDrawer('user', false)}>
           <div
             className="admin users"
             tabIndex={0}
-            role="button"
+
           >
             {userList}
           </div>
         </Drawer>
 
         {/* CONTENT ADMIN DRAWER */}
-        <Drawer anchor="right" open={this.state.content} onClick={this.toggleDrawer('content', false)}>
+        <Drawer anchor="right" open={this.state.content} onClose={this.toggleDrawer('content', false)}>
           <div
             className="admin modules"
             tabIndex={0}
@@ -344,7 +344,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
             classes={{
                         paper: classes.drawerPaper,
                     }}
-            onClick={this.handleDrawerToggle}
+            onClose={this.handleDrawerToggle}
             ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}
