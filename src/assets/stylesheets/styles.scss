@@ -38,7 +38,7 @@ nav {
   
   & > div:first-of-type {
     background: white;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
     border-radius: 2px;
   }
   ul {
@@ -151,10 +151,57 @@ header .desktop {
 .admin {
   width: 80vw;
 
+  h1 {
+    padding: 20px;
+  }
+  
+
   &.user {
 
   }
   &.content {
 
   }
+}
+
+.tooltips > div {
+  top: -15px !important;
+
+  & > div {
+    color: #132584;
+    background-color: #fff;
+  }
+}
+
+
+.chapter li:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.admin_description .admin > div {
+  background-color: #f3f3f3 !important;
+}
+
+.admin_description .jss13 {
+  margin: 20px;
+  width: 80%;
+  background-color: rgb(255, 255, 255) !important;
+}
+
+.jss13 {
+  margin: 10px;
+  background-color: rgb(238, 238, 238) !important;
+}
+
+.userAdmin__edit {
+  display: flex;
+  justify-content: space-between;
+
+  label {
+    padding-right: 7px;
+  }
+}
+
+.jss92 {
+  background-color: rgb(255, 255, 255) !important;
 }

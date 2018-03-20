@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
 import Typography from 'material-ui-next/Typography';
 import Modal from 'material-ui-next/Modal';
-import Button from 'material-ui-next/Button';
+
+/* BEGIN SUPPORT MODAL */
 
 function getModalStyle() {
   const top = 50;
@@ -13,59 +14,47 @@ function getModalStyle() {
     top: `${top}%`,
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
+    width: '40vw',
+    height: '20vh',
+    textAlign: 'center',
+    minWidth: '240px',
   };
 }
 
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: theme.spacing.unit * 25,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
   },
 });
 
-class SimpleModal extends React.Component {
-  state = {
-    open: false,
-  };
-
-  handleOpenModal = () => {
-    console.log('click';)
-    this.setState({ open: true });
-  };
-
-  handleCloseModal = () => {
-    this.setState({ open: false });
-  };
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <div>
-        <Typography gutterBottom>Click to get the full Modal experience!</Typography>
-        <Button onClick={this.handleOpenModal}>Open Modal</Button>
-        <Modal
-          aria-labelledby="Support"
-          aria-describedby="Contact information for support"
-          open={this.state.open}
-          onClose={this.handleCloseModal}
-        >
-          <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              We're here to help!
-            </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              Having trouble with the website? Please send us an email at <a href="mailto:support@macleanlifecoachin.com?subject=I'm having trouble with...">support@macleanlifecoaching.com</a>
-            </Typography>
-          </div>
-        </Modal>
+const SimpleModal = (props) => {
+  const { classes } = props;
+  const href = `mailto:${props.supportEmail}?subject=I'm having trouble with...`;
+  return (
+    <Modal
+      aria-labelledby="Support"
+      aria-describedby="Contact information for support"
+      open={props.open}
+      onClose={props.handleCloseModal}
+    >
+      <div style={getModalStyle()} className={classes.paper}>
+        <Typography variant="title" id="modal-title">
+          {props.supportTitle}
+        </Typography>
+        <Typography variant="subheading" id="simple-modal-description">
+          <br />
+        Having trouble?<br />
+        Please send us an email at:<br />
+          <a href={href}>{props.supportEmail}</a>
+        </Typography>
       </div>
-    );
-  }
-}
+    </Modal>
+  );
+};
 
 SimpleModal.propTypes = {
   classes: PropTypes.object.isRequired,

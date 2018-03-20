@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
@@ -73,7 +74,12 @@ let config = {
         extensions: ['.js', '.jsx'],
       },
     plugins: [
-        new ExtractTextWebpackPlugin('styles.css')
+        new ExtractTextWebpackPlugin('styles.css'),
+        new webpack.DefinePlugin({
+            "process.env": {
+              NODE_ENV: JSON.stringify("production"),
+            },
+          }),
     ],
     devServer: {
         contentBase: path.resolve(__dirname, './public'),
@@ -88,7 +94,26 @@ module.exports = config;
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.plugins.push(
-      new webpack.optimize.UglifyJsPlugin(), // call the uglify plugin
-      new OptimizeCSSAssets()
+
+      new OptimizeCSSAssets(),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false,
+          screw_ie8: true,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true
+        },
+        output: {
+          comments: false
+        }
+      }),
+      new webpack.HashedModuleIdsPlugin()
+      
     );
   }
