@@ -39,8 +39,8 @@ export default class Header extends React.Component { // eslint-disable-line rea
       open: false,
       user: false,
       content: false,
-      siteTitle: 'Maclean Life Consulting',
-      siteTagline: 'Release yesterday; embrace today',
+      siteTitle: 'Maclean Life Coaching',
+      siteTagline: 'Release Yesterday; Embrace Today',
       supportTitle: 'We\'re here to help!',
       supportEmail: 'support@macleanlifeconsulting.com',
     };

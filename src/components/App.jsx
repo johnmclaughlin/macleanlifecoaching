@@ -1,6 +1,7 @@
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React, { Component } from 'react';
+import { Switch, Route, Redirect } from 'react-router';
 import Moment from 'moment';
 import firebase, { auth, provider } from './firebase';
 import SignInScreen from './FirebaseAuth';
@@ -22,7 +23,22 @@ const NoContent = {
   videoRef: 'none',
 };
 
-class App extends Component {
+class ActivateAccount extends React.Component { // eslint-disable-line
+
+  componentDidMount() {
+    const { ryet } = this.props.match.params;
+    // PUT THE RYET TEST HERE
+    this.props.setRYET(ryet);
+  }
+
+  render() {
+    return (
+      <Redirect to="/" />
+    );
+  }
+}
+
+class App extends Component {  // eslint-disable-line
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +51,7 @@ class App extends Component {
       user: null,
       role: 'user',
       allUsers: '',
+      ryet: '',
     };
     this.handleModule = this.handleModule.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -48,13 +65,22 @@ class App extends Component {
       // If user state changes and 'user' exists, check Firebase Database for user
       const usersRef = firebase.database().ref(`users/s${user.uid}`);
       usersRef.on('value', (snapshot) => {
-        if (!snapshot.val()) {
+        // if there is a user record -> load app
+        // if there is no user record but there is a ryet -> create user record then load app
+        // else load message to join program
+        if (!snapshot.val() && this.state.ryet !== '') { // if there is no user record but there is a ryet
           usersRef.set({
             email: user.email,
             displayName: user.displayName,
             startDate: Moment().startOf('day').format('LLL'),
             origDate: Moment().startOf('day').format('LLL'),
             role: 'user',
+          });
+          const userWeek = 1;
+          const role = 'user';
+          this.setState({
+            userWeek,
+            role,
           });
         } else {
           const { role, startDate } = snapshot.val();
@@ -83,6 +109,10 @@ class App extends Component {
       }
       this.resetContent();
     });
+  }
+
+  setRYET = (ryet) => {
+    if (ryet !== '') this.setState({ ryet });
   }
 
   logout() {
@@ -139,7 +169,7 @@ class App extends Component {
         lessons: newState,
         module: {
           title: 'Welcome to Maclean Life Coaching',
-          subtitle: 'Release yesterday; embrace today',
+          subtitle: 'Release Yesterday; Embrace Today',
           ref: 'This is the module reference',
           description: '',
           videoRef: 'none',
@@ -153,6 +183,38 @@ class App extends Component {
   }
 
   render() {
+
+    let initialScreen;
+    if (this.state.role === 'disabled') {
+      initialScreen = (
+        <div className="container">
+          <div className="content"><Content content={this.nocontent} /></div>
+        </div>
+      );
+    } else if (this.state.user) {
+      initialScreen = (
+        <div className="container">
+          <nav className="display-item desktop">
+            <ProgramMenu lessons={this.state.lessons} userWeek={this.state.userWeek} onSelectModule={this.handleModule} />
+          </nav>
+          <div className="content"><Content content={this.state.module} /></div>
+        </div>
+      );
+    } else {
+      initialScreen = (
+        <div>
+          <Switch>
+            <Route exact path="/" render={() => <SignInScreen />} />
+            <Route
+              path="/:ryet"
+              render={props =>
+                <ActivateAccount {...props} setRYET={this.setRYET} />}
+            />
+          </Switch>
+        </div>
+      );
+    }
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div className="app">
@@ -168,19 +230,7 @@ class App extends Component {
             role={this.state.role}
             allUsers={this.state.allUsers}
           />
-          {this.state.user ?
-            <div className="container">
-              <nav className="display-item desktop">
-                <ProgramMenu lessons={this.state.lessons} userWeek={this.state.userWeek} onSelectModule={this.handleModule} />
-              </nav>
-              <div className="content"><Content content={this.state.module} /></div>
-            </div>
-          :
-
-            <div>
-              <SignInScreen />
-            </div>
-          }
+          {initialScreen}
 
         </div>
       </MuiThemeProvider>
