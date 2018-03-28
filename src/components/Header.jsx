@@ -40,7 +40,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
       user: false,
       content: false,
       siteTitle: 'Maclean Life Coaching',
-      siteTagline: 'Release Yesterday; Embrace Today',
+      siteTagline: 'Release Yesterday, Embrace Today',
       supportTitle: 'We\'re here to help!',
       supportEmail: 'support@macleanlifeconsulting.com',
     };

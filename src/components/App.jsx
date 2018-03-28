@@ -16,10 +16,10 @@ const muiTheme = getMuiTheme({
 });
 
 const NoContent = {
-  title: 'Welcome Message',
-  subtitle: 'For Unauthenticated Visitors',
+  title: 'Welcome to Release Yesterday, Embrace Today!',
+  subtitle: 'Thank you for your interest in this program.',
   ref: 'This is the module reference',
-  description: 'This is a good place to talk about the program and provide links back to the main webisite for more information',
+  description: 'You\'re seeing this screen because your login credentials were not recognized.<br /><br />For more information about the Release Yesterday, Embrace Today Package, please visit our site: <a target="_blank" href="https://macleanlifecoaching.com/product/release-yesterday-embrace-today-package/">Release Yesterday, Embrace Today</a>',
   videoRef: 'none',
 };
 
@@ -27,7 +27,6 @@ class ActivateAccount extends React.Component { // eslint-disable-line
 
   componentDidMount() {
     const { ryet } = this.props.match.params;
-    // PUT THE RYET TEST HERE
     this.props.setRYET(ryet);
   }
 
@@ -52,6 +51,7 @@ class App extends Component {  // eslint-disable-line
       role: 'user',
       allUsers: '',
       ryet: '',
+      ryetMatch: 'ikyt6koacfaj3nsz2dkl',
     };
     this.handleModule = this.handleModule.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,10 +65,17 @@ class App extends Component {  // eslint-disable-line
       // If user state changes and 'user' exists, check Firebase Database for user
       const usersRef = firebase.database().ref(`users/s${user.uid}`);
       usersRef.on('value', (snapshot) => {
-        // if there is a user record -> load app
-        // if there is no user record but there is a ryet -> create user record then load app
-        // else load message to join program
-        if (!snapshot.val() && this.state.ryet !== '') { // if there is no user record but there is a ryet
+        if (snapshot.val()) {
+          const { role, startDate } = snapshot.val();
+          let userWeek = (Math.floor(Moment.duration(Moment().startOf('day') - Moment(startDate, 'LLL')).asDays())) + 1;
+          if (role === 'admin') { userWeek = '100'; } // ADMIN USERS CAN VIEW ALL CONTENT
+          if (role === 'disabled') { userWeek = '0'; } // ADMIN USERS CAN VIEW ALL CONTENT
+          console.log('userWeek', userWeek);
+          this.setState({
+            userWeek,
+            role,
+          });
+        } else if (!snapshot.val() && this.state.ryet === this.state.ryetMatch) {
           usersRef.set({
             email: user.email,
             displayName: user.displayName,
@@ -83,12 +90,8 @@ class App extends Component {  // eslint-disable-line
             role,
           });
         } else {
-          const { role, startDate } = snapshot.val();
-          let userWeek = (Math.floor(Moment.duration(Moment().startOf('day') - Moment(startDate, 'LLL')).asWeeks())) + 1;
-          if (role === 'admin') { userWeek = '100'; } // ADMIN USERS CAN VIEW ALL CONTENT
-          if (role === 'disabled') { userWeek = '0'; } // ADMIN USERS CAN VIEW ALL CONTENT
+          const role = 'disabled';
           this.setState({
-            userWeek,
             role,
           });
         }
@@ -169,7 +172,7 @@ class App extends Component {  // eslint-disable-line
         lessons: newState,
         module: {
           title: 'Welcome to Maclean Life Coaching',
-          subtitle: 'Release Yesterday; Embrace Today',
+          subtitle: 'Release Yesterday, Embrace Today',
           ref: 'This is the module reference',
           description: '',
           videoRef: 'none',
@@ -188,7 +191,7 @@ class App extends Component {  // eslint-disable-line
     if (this.state.role === 'disabled') {
       initialScreen = (
         <div className="container">
-          <div className="content"><Content content={this.nocontent} /></div>
+          <div className="content__unauthenticated"><Content content={NoContent} /></div>
         </div>
       );
     } else if (this.state.user) {
