@@ -9,11 +9,16 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import Tooltip from 'material-ui-next/Tooltip';
 import Card, { CardContent } from 'material-ui-next/Card';
+import TextField from 'material-ui-next/TextField';
+import Button from 'material-ui-next/Button';
+import ExpansionPanel, { ExpansionPanelSummary, ExpansionPanelDetails } from 'material-ui-next/ExpansionPanel';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import firebase from './firebase';
 import ProgramMenu from './ProgramMenu';
 import SupportModal from './SupportModal';
 import UserAdminInput from './UserAdminInput';
 import ContentAdminInput from './ContentAdminInput';
+import SiteContentAdminInput from './SiteContentAdminInput';
 
 const root = {
   marginTop: '0',
@@ -39,10 +44,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
       open: false,
       user: false,
       content: false,
-      siteTitle: 'Maclean Life Coaching',
-      siteTagline: 'Release Yesterday, Embrace Today',
-      supportTitle: 'We\'re here to help!',
-      supportEmail: 'support@macleanlifeconsulting.com',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -76,11 +77,31 @@ export default class Header extends React.Component { // eslint-disable-line rea
       });
     }
     if (currentModule) {
-      const newDate = Moment().startOf('day').subtract(currentModule, 'weeks').format('LLL');
+      const newDate = Moment().startOf('day').subtract(currentModule, 'days').format('LLL');
       updateUser.update({
         startDate: newDate,
       });
     }
+  }
+
+  handleSiteContentSubmit(siteTitle, siteTagline, supportTitle, supportEmail, authTitle, authSubtitle, authDescription, authVideoRef, contentTitle, contentSubtitle, contentDescription, contentVideoRef) {  // eslint-disable-line 
+    const updateSiteContent = firebase.database().ref('site');
+    updateSiteContent.on('value', (snapshot) => {
+    });
+    updateSiteContent.update({
+      siteTitle,
+      siteTagline,
+      supportTitle,
+      supportEmail,
+      authTitle,
+      authSubtitle,
+      authDescription,
+      authVideoRef,
+      contentTitle,
+      contentSubtitle,
+      contentDescription,
+      contentVideoRef,
+    });
   }
 
   render() {
@@ -100,66 +121,122 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
     const userList = (
       <div>
-      <Card>
-              <CardContent>
-        <Typography variant="display1" gutterBottom><i className="material-icons">supervisor_account</i> User Administration</Typography>
-        <div className="admin_description">
-          <ul>
-            <li>Create email link with unique key for new users</li>
-          </ul>
-
-          {users.map((user, index) => (
-            <Card key={index} className={user.role}>
-              <CardContent>
-                <div key={user.email}>
-                  <Typography variant="title" gutterBottom>{user.displayName}</Typography>
-                  <Typography variant="subheading" gutterBottom>{user.email}</Typography>
-                  <Typography variant="body1" gutterBottom>Start Date: {Moment(user.origDate, 'LLL').format('LLL')}</Typography>
-                  <Typography variant="body1" gutterBottom>Override Current Module: {Moment(user.startDate, 'LLL').format('LLL')}</Typography>
-                  <UserAdminInput onSubmit={this.handleSubmit} userName={user.displayName} userRole={user.role} userID={keys[index]} email={user.email} currentModule={(Math.floor(Moment.duration(Moment().startOf('day') - Moment(user.startDate, 'LLL')).asWeeks())) + 1} />
-                </div>
-              </CardContent>
-            </Card>
+        <Card>
+          <CardContent>
+            <Typography variant="display1" gutterBottom><i className="material-icons">supervisor_account</i> User Administration</Typography>
+            <div className="admin_description">
+              <ul>
+                <li>Create email link with unique key for new users</li>
+              </ul>
+              {users.map((user, index) => (
+                <Card key={index} className={user.role}>
+                  <CardContent>
+                    <div key={user.email}>
+                      <Typography variant="title" gutterBottom>{user.displayName}</Typography>
+                      <Typography variant="subheading" gutterBottom>{user.email}</Typography>
+                      <Typography variant="body1" gutterBottom>Start Date: {Moment(user.origDate, 'LLL').format('LLL')}</Typography>
+                      <Typography variant="body1" gutterBottom>Override Current Module: {Moment(user.startDate, 'LLL').format('LLL')}</Typography>
+                      <UserAdminInput onSubmit={this.handleSubmit} userName={user.displayName} userRole={user.role} userID={keys[index]} email={user.email} currentModule={(Math.floor(Moment.duration(Moment().startOf('day') - Moment(user.startDate, 'LLL')).asDays())) + 1} />
+                    </div>
+                  </CardContent>
+                </Card>
           ))}
-        </div>
-        </CardContent>
-            </Card>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
 
     const contentList = (
-      <div>
-        <div className="admin__title">Content Administration</div>
-        <div className="admin_description">
-          <ul>
-            <li>Display all videos and their details</li>
-            <li>Modify all videos and their details</li>
-          </ul>
-          <ul>
-            {this.props.lessons.map((lesson) => {
-                  // convert object to array so we can use .map
-                  const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
-                    return (
-                      <li key={lesson.title}>
-                        <ContentAdminInput onSubmit={this.handleSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
-                        <ol>
-                          {mods.map(mod => (
-                            <li key={mod.title}>{mod.title}</li>
-                            ))
-                          }
-                        </ol>
-                      </li>
-                    );
-                })}
-          </ul>
-        </div>
-      </div>
+      <Card>
+        <CardContent>
+          <Typography variant="display1" gutterBottom><i className="material-icons">video_library</i> Content Administration</Typography>
+          <div className="admin_description">
+            <SiteContentAdminInput
+              onSubmit={this.handleSiteContentSubmit}
+              siteTitle={this.props.siteTitle}
+              siteTagline={this.props.siteTagline}
+              supportTitle={this.props.supportTitle}
+              supportEmail={this.props.supportEmail}
+              authTitle={this.props.authTitle}
+              authSubtitle={this.props.authSubtitle}
+              authDescription={this.props.authDescription}
+              authVideoRef={this.props.authVideoRef}
+              contentTitle={this.props.contentTitle}
+              contentSubtitle={this.props.contentSubtitle}
+              contentDescription={this.props.contentDescription}
+              contentVideoRef={this.props.contentVideoRef}
+            />
+            <ul>
+              {this.props.lessons.map((lesson) => {
+                    // convert object to array so we can use .map
+                    const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
+                      return (
+                        <ExpansionPanel key={lesson.title}>
+                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>{lesson.title}</Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <div className="module_content">
+                              <Card>
+                                <CardContent>
+                                  <ContentAdminInput onSubmit={this.handleSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
+                                </CardContent>
+                              </Card>
+                                {mods.map(mod => (
+                                  <div key={mod.ref}>
+                                  <form className="site_content" onSubmit={this.handleSubmit}>
+                                    <div>
+                                      <Card>
+                                        <CardContent>
+                                          <div>
+                                            <TextField className="module_content--input" id="moduleTitle" label="Module Title" margin="normal" value={mod.title} onChange={this.handleChange} />
+                                          </div>
+                                          <div>
+                                            <TextField className="module_content--input" id="moduleSubtitle" label="Module Subtitle" margin="normal" value={mod.subtitle} onChange={this.handleChange} />
+                                          </div>
+                                          <div>
+                                            <TextField className="module_content--input" id="moduleDescription" label="Module Description" margin="normal" value={mod.description} onChange={this.handleChange} />
+                                          </div>
+                                          <div>
+                                            <TextField className="module_content--input" id="moduleVideoRef" label="Module Video Reference" margin="normal" value={mod.videoRef} onChange={this.handleChange} />
+                                          </div>
+                                          <div>
+                                            <TextField className="module_content--input" id="moduleRef" label="Module Reference" margin="normal" value={mod.ref} onChange={this.handleChange} />
+                                          </div>
+                                          <div>
+                                            <Button
+                                              variant="raised"
+                                              color="default"
+                                              className="button"
+                                              type="submit"
+                                            >
+                                              Update Module
+                                            </Button>
+                                          </div>
+                                        </CardContent>
+                                      </Card>
+                                    </div>
+                                  </form>
+                                  </div>
+                                  ))
+                                }
+                              
+                            </div>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      );
+                  })}
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
     );
 
     const drawer = (
       <div>
         <nav className="display-item xxx-mobile">
-          <ProgramMenu lessons={this.props.lessons} userWeek={this.props.userWeek} onSelectModule={this.props.onSelectModule} />
+          <ProgramMenu lessons={this.props.lessons} userWeek={this.props.userWeek} onSelectModule={this.props.onSelectModule} user={this.state.user} />
         </nav>
       </div>
     );
@@ -173,7 +250,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
               </IconButton>
             </div>
             <Typography type="title" gutterBottom color="inherit" style={flex}>
-                    {this.state.siteTitle}<span className="desktop">{this.state.siteTagline}</span>
+              {this.props.siteTitle}<span className="desktop">{this.props.siteTagline}</span>
             </Typography>
             <div className="controls">
               <div className="controls__user">
@@ -212,8 +289,8 @@ export default class Header extends React.Component { // eslint-disable-line rea
           open={this.state.open}
           handleOpenModal={this.handleOpenModal}
           handleCloseModal={this.handleCloseModal}
-          supportTitle={this.state.supportTitle}
-          supportEmail={this.state.supportEmail}
+          supportTitle={this.props.supportTitle}
+          supportEmail={this.props.supportEmail}
         />
 
         {/* USER ADMIN DRAWER */}

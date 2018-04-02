@@ -15,14 +15,6 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const NoContent = {
-  title: 'Welcome to Release Yesterday, Embrace Today!',
-  subtitle: 'Thank you for your interest in this program.',
-  ref: 'This is the module reference',
-  description: 'You\'re seeing this screen because your login credentials were not recognized.<br /><br />For more information about the Release Yesterday, Embrace Today Package, please visit our site: <a target="_blank" href="https://macleanlifecoaching.com/product/release-yesterday-embrace-today-package/">Release Yesterday, Embrace Today</a>',
-  videoRef: 'none',
-};
-
 class ActivateAccount extends React.Component { // eslint-disable-line
 
   componentDidMount() {
@@ -52,6 +44,7 @@ class App extends Component {  // eslint-disable-line
       allUsers: '',
       ryet: '',
       ryetMatch: 'ikyt6koacfaj3nsz2dkl',
+      progress: '',
     };
     this.handleModule = this.handleModule.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,14 +59,14 @@ class App extends Component {  // eslint-disable-line
       const usersRef = firebase.database().ref(`users/s${user.uid}`);
       usersRef.on('value', (snapshot) => {
         if (snapshot.val()) {
-          const { role, startDate } = snapshot.val();
+          const { role, startDate, module } = snapshot.val();
           let userWeek = (Math.floor(Moment.duration(Moment().startOf('day') - Moment(startDate, 'LLL')).asDays())) + 1;
           if (role === 'admin') { userWeek = '100'; } // ADMIN USERS CAN VIEW ALL CONTENT
           if (role === 'disabled') { userWeek = '0'; } // ADMIN USERS CAN VIEW ALL CONTENT
-          console.log('userWeek', userWeek);
           this.setState({
             userWeek,
             role,
+            progress: module,
           });
         } else if (!snapshot.val() && this.state.ryet === this.state.ryetMatch) {
           usersRef.set({
@@ -102,6 +95,25 @@ class App extends Component {  // eslint-disable-line
         const allUsers = snapshot.val();
         this.setState({
           allUsers,
+        });
+      });
+
+      const getSiteContent = firebase.database().ref('site');
+      getSiteContent.on('value', (snapshot) => {
+        const siteContent = snapshot.val();
+        this.setState({
+          siteTitle: siteContent.siteTitle,
+          siteTagline: siteContent.siteTagline,
+          supportTitle: siteContent.supportTitle,
+          supportEmail: siteContent.supportEmail,
+          authTitle: siteContent.authTitle,
+          authSubtitle: siteContent.authSubtitle,
+          authDescription: siteContent.authDescription,
+          authVideoRef: siteContent.authVideoRef,
+          contentTitle: siteContent.contentTitle,
+          contentSubtitle: siteContent.contentSubtitle,
+          contentDescription: siteContent.contentDescription,
+          contentVideoRef: siteContent.contentVideoRef,
         });
       });
 
@@ -171,11 +183,11 @@ class App extends Component {  // eslint-disable-line
       this.setState({
         lessons: newState,
         module: {
-          title: 'Welcome to Maclean Life Coaching',
-          subtitle: 'Release Yesterday, Embrace Today',
+          title: this.state.authTitle,
+          subtitle: this.state.authSubtitle,
           ref: 'This is the module reference',
-          description: '',
-          videoRef: 'none',
+          description: this.state.authDescription,
+          videoRef: this.state.authVideoRef,
         },
       });
     });
@@ -186,6 +198,13 @@ class App extends Component {  // eslint-disable-line
   }
 
   render() {
+    const NoContent = {
+      title: this.state.contentTitle,
+      subtitle: this.state.contentSubtitle,
+      ref: 'This is the module reference',
+      description: this.state.contentDescription,
+      videoRef: this.state.contentVideoRef,
+    };
 
     let initialScreen;
     if (this.state.role === 'disabled') {
@@ -198,9 +217,9 @@ class App extends Component {  // eslint-disable-line
       initialScreen = (
         <div className="container">
           <nav className="display-item desktop">
-            <ProgramMenu lessons={this.state.lessons} userWeek={this.state.userWeek} onSelectModule={this.handleModule} />
+            <ProgramMenu lessons={this.state.lessons} userWeek={this.state.userWeek} onSelectModule={this.handleModule} user={this.state.user} progress={this.state.progress} />
           </nav>
-          <div className="content"><Content content={this.state.module} /></div>
+          <div className="content"><Content content={this.state.module} user={this.state.user} /></div>
         </div>
       );
     } else {
@@ -232,6 +251,18 @@ class App extends Component {  // eslint-disable-line
             resetContent={this.resetContent}
             role={this.state.role}
             allUsers={this.state.allUsers}
+            siteTitle={this.state.siteTitle}
+            siteTagline={this.state.siteTagline}
+            supportTitle={this.state.supportTitle}
+            supportEmail={this.state.supportEmail}
+            authTitle={this.state.authTitle}
+            authSubtitle={this.state.authSubtitle}
+            authDescription={this.state.authDescription}
+            authVideoRef={this.state.authVideoRef}
+            contentTitle={this.state.contentTitle}
+            contentSubtitle={this.state.contentSubtitle}
+            contentDescription={this.state.contentDescription}
+            contentVideoRef={this.state.contentVideoRef}
           />
           {initialScreen}
 

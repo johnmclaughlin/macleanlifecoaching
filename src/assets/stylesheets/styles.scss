@@ -197,6 +197,17 @@ header .desktop {
   background-color: rgb(238, 238, 238) !important;
 }
 
+.site_content {
+
+  button {
+    margin-top: 20px;
+  }
+
+  &--input {
+  width: 90%;
+  }
+}
+
 .userAdmin__edit {
   display: flex;
   justify-content: space-between;
@@ -208,4 +219,34 @@ header .desktop {
 
 .jss92 {
   background-color: rgb(255, 255, 255) !important;
+}
+
+.viewing {
+  color: #3f51b5 !important;
+}
+
+.complete {
+  color: green !important;
+}
+
+.module_content {
+  width: 100%;
+}
+
+.module_content {
+  width: 100%;
+
+  button {
+    margin-top: 20px;
+  }
+
+  &--input {
+  width: 90%;
+  }
+}
+
+.module_details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }

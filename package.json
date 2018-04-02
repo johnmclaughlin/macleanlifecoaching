@@ -51,6 +51,7 @@
     "react-firebaseui": "^1.1.8",
     "react-router": "^4.2.0",
     "react-router-dom": "4.1.1",
+    "react-youtube": "^7.5.0",
     "typeface-roboto": "0.0.45"
   }
 }
