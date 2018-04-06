@@ -255,7 +255,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
     const drawer = (
       <div>
-        <nav className="display-item xxx-mobile">
+        <nav className="display-item mobile">
           <ProgramMenu
             lessons={this.props.lessons}
             userWeek={this.props.userWeek}
