@@ -221,7 +221,13 @@ class App extends Component {  // eslint-disable-line
       initialScreen = (
         <div className="container">
           <nav className="display-item desktop">
-            <ProgramMenu lessons={this.state.lessons} userWeek={this.state.userWeek} onSelectModule={this.handleModule} user={this.state.user} progress={this.state.progress} />
+            <ProgramMenu
+              lessons={this.state.lessons}
+              userWeek={this.state.userWeek}
+              onSelectModule={this.handleModule}
+              user={this.state.user}
+              progress={this.state.progress}
+            />
           </nav>
           <div className="content"><Content content={this.state.module} user={this.state.user} /></div>
         </div>
@@ -267,6 +273,7 @@ class App extends Component {  // eslint-disable-line
             contentSubtitle={this.state.contentSubtitle}
             contentDescription={this.state.contentDescription}
             contentVideoRef={this.state.contentVideoRef}
+            progress={this.state.progress}
           />
           {initialScreen}
 
