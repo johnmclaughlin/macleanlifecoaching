@@ -1,0 +1,38 @@
+[debug] [2018-04-05T21:08:21.876Z] ----------------------------------------------------------------------
+[debug] [2018-04-05T21:08:21.878Z] Command:       /Users/johnmclaughlin/.nvm/versions/node/v7.10.1/bin/node /Users/johnmclaughlin/.nvm/versions/node/v7.10.1/bin/firebase deploy
+[debug] [2018-04-05T21:08:21.879Z] CLI Version:   3.17.5
+[debug] [2018-04-05T21:08:21.879Z] Platform:      darwin
+[debug] [2018-04-05T21:08:21.879Z] Node Version:  v7.10.1
+[debug] [2018-04-05T21:08:21.880Z] Time:          Thu Apr 05 2018 17:08:21 GMT-0400 (EDT)
+[debug] [2018-04-05T21:08:21.880Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-04-05T21:08:21.896Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-04-05T21:08:21.896Z] > authorizing via signed-in user
+[debug] [2018-04-05T21:08:21.899Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/macleanlifecoaching  
+  
+ Thu Apr 05 2018 17:08:21 GMT-0400 (EDT)
+[debug] [2018-04-05T21:08:22.329Z] <<< HTTP RESPONSE 200
+[debug] [2018-04-05T21:08:22.330Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/macleanlifecoaching/tokens  
+  
+ Thu Apr 05 2018 17:08:22 GMT-0400 (EDT)
+[debug] [2018-04-05T21:08:22.880Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'macleanlifecoaching'...
+[info] 
+[info] i  deploying database, hosting
+[info] i  database: checking rules syntax...
+[debug] [2018-04-05T21:08:23.204Z] >>> HTTP REQUEST PUT https://macleanlifecoaching.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null"
+  }
+}
+ 
+ Thu Apr 05 2018 17:08:23 GMT-0400 (EDT)
+[debug] [2018-04-05T21:08:23.487Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database macleanlifecoaching is valid
+[info] i  hosting: preparing public directory for upload...
+[debug] [2018-04-05T21:08:23.962Z] >>> HTTP REQUEST PUT https://deploy.firebase.com/v1/hosting/macleanlifecoaching/uploads/-L9MctRaQPvUbRU7G3Xr?fileCount=6&message=  
+  
+ Thu Apr 05 2018 17:08:23 GMT-0400 (EDT)
