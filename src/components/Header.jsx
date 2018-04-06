@@ -9,17 +9,11 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import Tooltip from 'material-ui-next/Tooltip';
 import Card, { CardContent } from 'material-ui-next/Card';
-import TextField from 'material-ui-next/TextField';
-import Button from 'material-ui-next/Button';
-import ExpansionPanel, { ExpansionPanelSummary, ExpansionPanelDetails } from 'material-ui-next/ExpansionPanel';
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import firebase from './firebase';
 import ProgramMenu from './ProgramMenu';
 import SupportModal from './SupportModal';
 import UserAdminInput from './UserAdminInput';
-import ContentAdminInput from './ContentAdminInput';
 import SiteContentAdminInput from './SiteContentAdminInput';
-import ModuleContentInput from './ModuleContentInput';
 
 const root = {
   marginTop: '0',
@@ -105,33 +99,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
     });
   }
 
-  handleModuleContentSubmit(id, title, subtitle, description, videoRef, ref) {  // eslint-disable-line 
-    const modRef = ref.substring(3); // seperates string from 10 characters
-    const lessonRef = ref.substring(0, 3);
-    const updateModuleContent = firebase.database().ref(`lessons/${lessonRef}/modules/${modRef}`);
-    updateModuleContent.on('value', (snapshot) => {
-    });
-    updateModuleContent.update({
-      title,
-      subtitle,
-      description,
-      videoRef,
-      ref,
-    });
-  }
-
-  handleLessonSubmit(id, week, title ) {  // eslint-disable-line 
-    const lessonRef = id.toString().length === 1 ? `w0${id}` : `w${id}`;
-    const updateLessonContent = firebase.database().ref(`lessons/${lessonRef}`);
-    updateLessonContent.on('value', (snapshot) => {
-    });
-    updateLessonContent.update({
-      id,
-      title,
-      week,
-    });
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -194,60 +161,8 @@ export default class Header extends React.Component { // eslint-disable-line rea
               contentSubtitle={this.props.contentSubtitle}
               contentDescription={this.props.contentDescription}
               contentVideoRef={this.props.contentVideoRef}
+              lessons={this.props.lessons}
             />
-            <ul>
-              {this.props.lessons.map((lesson) => {
-                    let lessonRef, ref;
-                    if (!lesson.modules) {
-                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
-                      ref = `${lessonRef}m01`;
-                      lesson.modules = { m01: { description: '', ref, subtitle: '', title: '', videoRef: '' } };
-                    } else {
-                      let newModule = Object.keys(lesson.modules).length + 1;
-                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
-                      newModule = newModule < 10 ? newModule = `m0${newModule}` : newModule = `m${newModule}`;
-                      ref = `${lessonRef + newModule}`;
-                    }
-                    const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
-                    const newMod = { description: '', ref, subtitle: '', title: '', videoRef: '' };
-                      return (
-                        <ExpansionPanel key={lesson.title}>
-                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography>{lesson.title}</Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <div className="module_content">
-                              <Card>
-                                <CardContent>
-                                  <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
-                                </CardContent>
-                              </Card>
-                              {mods.map(mod => (
-                                <ModuleContentInput mod={mod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} />
-                                ))
-                              }
-                              <ModuleContentInput mod={newMod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} />
-                            </div>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                      );
-                  })}
-              <ExpansionPanel key="new">
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>Add New Module</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <div className="module_content">
-                    <Card>
-                      <CardContent>
-                        <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleWeek={0} />
-                      </CardContent>
-                    </Card>
-                    {/* <ModuleContentInput onSubmit={this.handleModuleContentSubmit} /> */}
-                  </div>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </ul>
           </div>
         </CardContent>
       </Card>

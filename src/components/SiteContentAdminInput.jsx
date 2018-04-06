@@ -7,6 +7,11 @@ import { withStyles } from 'material-ui-next/styles';
 import AppBar from 'material-ui-next/AppBar';
 import Tabs, { Tab } from 'material-ui-next/Tabs';
 import Typography from 'material-ui-next/Typography';
+import ExpansionPanel, { ExpansionPanelSummary, ExpansionPanelDetails } from 'material-ui-next/ExpansionPanel';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+import ContentAdminInput from './ContentAdminInput';
+import ModuleContentInput from './ModuleContentInput';
+import firebase from './firebase';
 
 function TabContainer(props) {
   return (
@@ -87,6 +92,34 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
       this.state.contentVideoRef === '' ? this.props.contentVideoRef : this.state.contentVideoRef,
     );
   }
+
+  handleModuleContentSubmit(id, title, subtitle, description, videoRef, ref) {  // eslint-disable-line 
+    const modRef = ref.substring(3); // seperates string from 10 characters
+    const lessonRef = ref.substring(0, 3);
+    const updateModuleContent = firebase.database().ref(`lessons/${lessonRef}/modules/${modRef}`);
+    updateModuleContent.on('value', (snapshot) => {
+    });
+    updateModuleContent.update({
+      title,
+      subtitle,
+      description,
+      videoRef,
+      ref,
+    });
+  }
+
+  handleLessonSubmit(id, week, title ) {  // eslint-disable-line 
+    const lessonRef = id.toString().length === 1 ? `w0${id}` : `w${id}`;
+    const updateLessonContent = firebase.database().ref(`lessons/${lessonRef}`);
+    updateLessonContent.on('value', (snapshot) => {
+    });
+    updateLessonContent.update({
+      id,
+      title,
+      week,
+    });
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -111,6 +144,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
               <Tab label="Site Content" />
               <Tab label="Member Content" />
               <Tab label="Non-member Content" />
+              <Tab label="Course Content" />
             </Tabs>
           </AppBar>
           {value === 0 && <TabContainer>
@@ -157,7 +191,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                       <TextField className="site_content--input" id="authSubtitle" label="Subtitle" margin="normal" value={authSubtitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="authDescription" label="Description" margin="normal" value={authDescription} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="authDescription" label="Description" margin="normal" multiline="true" rows="5" value={authDescription} onChange={this.handleChange} />
                     </div>
                     <div>
                       <TextField className="site_content--input" id="authVideoRef" label="Video Reference" margin="normal" value={authVideoRef} onChange={this.handleChange} />
@@ -189,7 +223,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                       <TextField className="site_content--input" id="contentSubtitle" label="Non-member Subtitle" margin="normal" value={contentSubtitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="contentDescription" label="Non-member Description" margin="normal" value={contentDescription} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="contentDescription" label="Non-member Description" margin="normal" multiline="true" rows="5" value={contentDescription} onChange={this.handleChange} />
                     </div>
                     <div>
                       <TextField className="site_content--input" id="contentVideoRef" label="Non-member Video Reference" margin="normal" value={contentVideoRef} onChange={this.handleChange} />
@@ -208,6 +242,60 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                 </Card>
               </div>
             </form>
+          </TabContainer>}
+          {value === 3 && <TabContainer>
+            <ul>
+              {this.props.lessons.map((lesson) => {
+                    let lessonRef, ref;
+                    if (!lesson.modules) {
+                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                      ref = `${lessonRef}m01`;
+                      lesson.modules = { m01: { description: '', ref, subtitle: '', title: '', videoRef: '' } };
+                    } else {
+                      let newModule = Object.keys(lesson.modules).length + 1;
+                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                      newModule = newModule < 10 ? newModule = `m0${newModule}` : newModule = `m${newModule}`;
+                      ref = `${lessonRef + newModule}`;
+                    }
+                    const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
+                    const newMod = { description: '', ref, subtitle: '', title: '', videoRef: '' };
+                      return (
+                        <ExpansionPanel key={lesson.title}>
+                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography>{lesson.title}</Typography>
+                          </ExpansionPanelSummary>
+                          <ExpansionPanelDetails>
+                            <div className="module_content">
+                              <Card>
+                                <CardContent>
+                                  <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
+                                </CardContent>
+                              </Card>
+                              {mods.map(mod => (
+                                <ModuleContentInput mod={mod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Update Module" />
+                                ))
+                              }
+                              <ModuleContentInput mod={newMod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Create New Module" />
+                            </div>
+                          </ExpansionPanelDetails>
+                        </ExpansionPanel>
+                      );
+                  })}
+              <ExpansionPanel key="new">
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>Add New Module</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <div className="module_content">
+                    <Card>
+                      <CardContent>
+                        <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleWeek={0} />
+                      </CardContent>
+                    </Card>
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </ul>
           </TabContainer>}
         </div>
       </div>

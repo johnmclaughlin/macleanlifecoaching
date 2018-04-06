@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui-next/TextField';
-import Select from 'material-ui-next/Select';
 import Button from 'material-ui-next/Button';
-import { InputLabel } from 'material-ui-next/Input';
 import Card, { CardContent } from 'material-ui-next/Card';
 import TextEditor from './TextEditor';
 
@@ -70,7 +68,7 @@ class ModuleContentInput extends React.Component { // eslint-disable-line react/
                   <TextField className="module_content--input" id="subtitle" label="Module Subtitle" margin="normal" value={this.state.subtitle} onChange={this.handleChange} />
                 </div>
                 <div>
-                  <TextField className="module_content--input" id="description" label="Module Description" margin="normal" value={this.state.description} onChange={this.handleChange} />
+                  <TextField className="module_content--input" id="description" label="Module Description" margin="normal" multiline="true" rows="5" value={this.state.description} onChange={this.handleChange} />
                 </div>
                 <div>
                   <TextField className="module_content--input" id="videoRef" label="Module Video Reference" margin="normal" value={this.state.videoRef} onChange={this.handleChange} />
@@ -86,7 +84,7 @@ class ModuleContentInput extends React.Component { // eslint-disable-line react/
                     className="button"
                     type="submit"
                   >
-                    Update Module
+                    {this.props.buttonName}
                   </Button>
                 </div>
               </CardContent>

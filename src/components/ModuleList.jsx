@@ -5,7 +5,6 @@ export default class ModuleList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
     };
     let completeCount;
     let viewingCount;
@@ -13,15 +12,7 @@ export default class ModuleList extends React.Component {
   }
 
   componentDidMount() {
-    // if (this.moduleCount) {
-    //   if (this.moduleCount === this.completeCount) {
-    //     console.log('fire COMPLETE');
-    //     this.props.handleProgress('complete');
-    //   } else if (this.viewingCount > 0) {
-    //     console.log('fire VIEWING');
-    //     this.props.handleProgress('viewing');
-    //   }
-    // }
+
   }
 
 handleModChange = (val) => {
