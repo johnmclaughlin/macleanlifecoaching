@@ -59,7 +59,9 @@ class App extends Component {  // eslint-disable-line
       const usersRef = firebase.database().ref(`users/s${user.uid}`);
       usersRef.on('value', (snapshot) => {
         if (snapshot.val()) {
-          const { role, startDate, module } = snapshot.val();
+          const { role, startDate } = snapshot.val();
+          let { module } = snapshot.val();
+          if (!module) { module = { w00m01: 'viewing' }; }
           let userWeek = (Math.floor(Moment.duration(Moment().startOf('day') - Moment(startDate, 'LLL')).asDays())) + 1;
           if (role === 'admin') { userWeek = '100'; } // ADMIN USERS CAN VIEW ALL CONTENT
           if (role === 'disabled') { userWeek = '0'; } // ADMIN USERS CAN VIEW ALL CONTENT
@@ -75,12 +77,14 @@ class App extends Component {  // eslint-disable-line
             startDate: Moment().startOf('day').format('LLL'),
             origDate: Moment().startOf('day').format('LLL'),
             role: 'user',
+            module: { temp: 'temp' },
           });
           const userWeek = 1;
           const role = 'user';
           this.setState({
             userWeek,
             role,
+            module: { w00m01: 'viewing' },
           });
         } else {
           const role = 'disabled';

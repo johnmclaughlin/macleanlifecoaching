@@ -42,35 +42,36 @@ renderList(modules, progress) {
 
     console.log('k', k);
 
-    if (progress[ref] === 'viewing') {
-      status = 'play_circle_outline';
-      classes = 'material-icons viewing';
-      this.viewingCount++;
-    } else if (progress[ref] === 'complete') {
-      status = 'check';
-      classes = 'material-icons complete';
-      this.completeCount++;
+    if (progress && progress.hasOwnProperty(ref)) {
+      if (progress[ref] === 'viewing') {
+        status = 'play_circle_outline';
+        classes = 'material-icons viewing';
+        this.viewingCount++;
+      } else if (progress[ref] === 'complete') {
+        status = 'check';
+        classes = 'material-icons complete';
+        this.completeCount++;
+      }
     }
 
     console.log('moduleCount', this.moduleCount, 'completeCount', this.completeCount);
     list.push(<ListItem key={k} onClick={() => this.handleModChange({ val })}><ListItemText primary={title} /><ListItemIcon><i className={classes}>{status}</i></ListItemIcon></ListItem>);
   }
-  console.log('modules', this.moduleCount, 'completes', this.completeCount, 'viewing', this.viewingCount);
+  //console.log('modules', this.moduleCount, 'completes', this.completeCount, 'viewing', this.viewingCount);
   if (this.moduleCount) {
     if (this.moduleCount === this.completeCount) {
       console.log('fire COMPLETE');
-      //this.props.handleProgress('complete');
+      // this.props.handleProgress('complete');
     } else if (this.viewingCount > 0) {
       console.log('fire VIEWING');
-      //this.props.handleProgress('viewing');
+      // this.props.handleProgress('viewing');
     }
   }
   return list;
 }
 
 render() {
-  const modules = this.props.modules;
-  const progress = this.props.progress;
+  const { modules, progress } = this.props;
 
   return (
     <div className="chapter">

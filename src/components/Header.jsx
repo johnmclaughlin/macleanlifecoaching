@@ -19,6 +19,7 @@ import SupportModal from './SupportModal';
 import UserAdminInput from './UserAdminInput';
 import ContentAdminInput from './ContentAdminInput';
 import SiteContentAdminInput from './SiteContentAdminInput';
+import ModuleContentInput from './ModuleContentInput';
 
 const root = {
   marginTop: '0',
@@ -104,6 +105,33 @@ export default class Header extends React.Component { // eslint-disable-line rea
     });
   }
 
+  handleModuleContentSubmit(id, title, subtitle, description, videoRef, ref) {  // eslint-disable-line 
+    const modRef = ref.substring(3); // seperates string from 10 characters
+    const lessonRef = ref.substring(0, 3);
+    const updateModuleContent = firebase.database().ref(`lessons/${lessonRef}/modules/${modRef}`);
+    updateModuleContent.on('value', (snapshot) => {
+    });
+    updateModuleContent.update({
+      title,
+      subtitle,
+      description,
+      videoRef,
+      ref,
+    });
+  }
+
+  handleLessonSubmit(id, week, title ) {  // eslint-disable-line 
+    const lessonRef = id.toString().length === 1 ? `w0${id}` : `w${id}`;
+    const updateLessonContent = firebase.database().ref(`lessons/${lessonRef}`);
+    updateLessonContent.on('value', (snapshot) => {
+    });
+    updateLessonContent.update({
+      id,
+      title,
+      week,
+    });
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -169,8 +197,19 @@ export default class Header extends React.Component { // eslint-disable-line rea
             />
             <ul>
               {this.props.lessons.map((lesson) => {
-                    // convert object to array so we can use .map
+                    let lessonRef, ref;
+                    if (!lesson.modules) {
+                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                      ref = `${lessonRef}m01`;
+                      lesson.modules = { m01: { description: '', ref, subtitle: '', title: '', videoRef: '' } };
+                    } else {
+                      let newModule = Object.keys(lesson.modules).length + 1;
+                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                      newModule = newModule < 10 ? newModule = `m0${newModule}` : newModule = `m${newModule}`;
+                      ref = `${lessonRef + newModule}`;
+                    }
                     const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
+                    const newMod = { description: '', ref, subtitle: '', title: '', videoRef: '' };
                       return (
                         <ExpansionPanel key={lesson.title}>
                           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -180,53 +219,34 @@ export default class Header extends React.Component { // eslint-disable-line rea
                             <div className="module_content">
                               <Card>
                                 <CardContent>
-                                  <ContentAdminInput onSubmit={this.handleSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
+                                  <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
                                 </CardContent>
                               </Card>
-                                {mods.map(mod => (
-                                  <div key={mod.ref}>
-                                  <form className="site_content" onSubmit={this.handleSubmit}>
-                                    <div>
-                                      <Card>
-                                        <CardContent>
-                                          <div>
-                                            <TextField className="module_content--input" id="moduleTitle" label="Module Title" margin="normal" value={mod.title} onChange={this.handleChange} />
-                                          </div>
-                                          <div>
-                                            <TextField className="module_content--input" id="moduleSubtitle" label="Module Subtitle" margin="normal" value={mod.subtitle} onChange={this.handleChange} />
-                                          </div>
-                                          <div>
-                                            <TextField className="module_content--input" id="moduleDescription" label="Module Description" margin="normal" value={mod.description} onChange={this.handleChange} />
-                                          </div>
-                                          <div>
-                                            <TextField className="module_content--input" id="moduleVideoRef" label="Module Video Reference" margin="normal" value={mod.videoRef} onChange={this.handleChange} />
-                                          </div>
-                                          <div>
-                                            <TextField className="module_content--input" id="moduleRef" label="Module Reference" margin="normal" value={mod.ref} onChange={this.handleChange} />
-                                          </div>
-                                          <div>
-                                            <Button
-                                              variant="raised"
-                                              color="default"
-                                              className="button"
-                                              type="submit"
-                                            >
-                                              Update Module
-                                            </Button>
-                                          </div>
-                                        </CardContent>
-                                      </Card>
-                                    </div>
-                                  </form>
-                                  </div>
-                                  ))
-                                }
-                              
+                              {mods.map(mod => (
+                                <ModuleContentInput mod={mod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} />
+                                ))
+                              }
+                              <ModuleContentInput mod={newMod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} />
                             </div>
                           </ExpansionPanelDetails>
                         </ExpansionPanel>
                       );
                   })}
+              <ExpansionPanel key="new">
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>Add New Module</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <div className="module_content">
+                    <Card>
+                      <CardContent>
+                        <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleWeek={0} />
+                      </CardContent>
+                    </Card>
+                    {/* <ModuleContentInput onSubmit={this.handleModuleContentSubmit} /> */}
+                  </div>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
             </ul>
           </div>
         </CardContent>

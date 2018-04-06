@@ -151,16 +151,16 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                 <Card>
                   <CardContent>
                     <div>
-                      <TextField className="site_content--input" id="authTitle" label="Authenticated Title" margin="normal" value={authTitle} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="authTitle" label="Title" margin="normal" value={authTitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="authSubtitle" label="Authenticated Subtitle" margin="normal" value={authSubtitle} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="authSubtitle" label="Subtitle" margin="normal" value={authSubtitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="authDescription" label="Authenticated Description" margin="normal" value={authDescription} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="authDescription" label="Description" margin="normal" value={authDescription} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="authVideoRef" label="Authenticated Video Reference" margin="normal" value={authVideoRef} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="authVideoRef" label="Video Reference" margin="normal" value={authVideoRef} onChange={this.handleChange} />
                     </div>
                     <div>
                       <Button
@@ -169,7 +169,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                         className="button"
                         type="submit"
                       >
-                    Update Authenticated Content
+                    Update Member Content
                       </Button>
                     </div>
                   </CardContent>
@@ -183,16 +183,16 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                 <Card>
                   <CardContent>
                     <div>
-                      <TextField className="site_content--input" id="contentTitle" label="Default Title" margin="normal" value={contentTitle} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="contentTitle" label="Non-member Title" margin="normal" value={contentTitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="contentSubtitle" label="Default Subtitle" margin="normal" value={contentSubtitle} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="contentSubtitle" label="Non-member Subtitle" margin="normal" value={contentSubtitle} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="contentDescription" label="Default Description" margin="normal" value={contentDescription} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="contentDescription" label="Non-member Description" margin="normal" value={contentDescription} onChange={this.handleChange} />
                     </div>
                     <div>
-                      <TextField className="site_content--input" id="contentVideoRef" label="Default Video Reference" margin="normal" value={contentVideoRef} onChange={this.handleChange} />
+                      <TextField className="site_content--input" id="contentVideoRef" label="Non-member Video Reference" margin="normal" value={contentVideoRef} onChange={this.handleChange} />
                     </div>
                     <div>
                       <Button
@@ -201,7 +201,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
                         className="button"
                         type="submit"
                       >
-                        Update Default Content
+                        Update Non-member Content
                       </Button>
                     </div>
                   </CardContent>

@@ -37,6 +37,9 @@
     "webpack-dev-server": "2.7.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "draft-js": "^0.10.5",
+    "es6-shim": "^0.35.3",
     "firebase": "^4.10.1",
     "firebaseui": "^2.6.2",
     "html-webpack-plugin": "^3.0.6",
