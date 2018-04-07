@@ -64,8 +64,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
   handleSubmit(userID, userRole, currentModule) {  // eslint-disable-line 
     const updateUser = firebase.database().ref(`users/${userID}`);
-    updateUser.on('value', (snapshot) => {
-    });
     if (userRole) {
       updateUser.update({
         role: userRole,
@@ -81,8 +79,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
 
   handleSiteContentSubmit(siteTitle, siteTagline, supportTitle, supportEmail, authTitle, authSubtitle, authDescription, authVideoRef, contentTitle, contentSubtitle, contentDescription, contentVideoRef) {  // eslint-disable-line 
     const updateSiteContent = firebase.database().ref('site');
-    updateSiteContent.on('value', (snapshot) => {
-    });
     updateSiteContent.update({
       siteTitle,
       siteTagline,
@@ -124,7 +120,7 @@ export default class Header extends React.Component { // eslint-disable-line rea
                 <li>Create email link with unique key for new users</li>
               </ul>
               {users.map((user, index) => (
-                <Card key={index} className={user.role}>
+                <Card key={user.email} className={user.role}>
                   <CardContent>
                     <div key={user.email}>
                       <Typography variant="title" gutterBottom>{user.displayName}</Typography>
@@ -277,3 +273,25 @@ export default class Header extends React.Component { // eslint-disable-line rea
     );
   }
 }
+
+Header.propTypes = {
+  classes: PropTypes.object.isRequired, // eslint-disable-line
+  allUsers: PropTypes.object.isRequired, // eslint-disable-line
+  lessons: PropTypes.array.isRequired, // eslint-disable-line
+  onSelectModule: PropTypes.func.isRequired,
+  siteTitle: PropTypes.string.isRequired,
+  siteTagline: PropTypes.string.isRequired,
+  supportTitle: PropTypes.string.isRequired,
+  supportEmail: PropTypes.string.isRequired,
+  authTitle: PropTypes.string.isRequired,
+  authSubtitle: PropTypes.string.isRequired,
+  authDescription: PropTypes.string.isRequired,
+  authVideoRef: PropTypes.string.isRequired,
+  contentTitle: PropTypes.string.isRequired,
+  contentSubtitle: PropTypes.string.isRequired,
+  contentDescription: PropTypes.string.isRequired,
+  contentVideoRef: PropTypes.string.isRequired,
+  userWeek: PropTypes.number.isRequired,
+  role: PropTypes.string.isRequired,
+  progress: PropTypes.object.isRequired, // eslint-disable-line
+};

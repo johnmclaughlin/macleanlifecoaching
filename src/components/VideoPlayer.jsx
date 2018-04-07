@@ -61,7 +61,7 @@ export default class VideoPlayer extends React.Component {
     };
 
     // const { contentRef } = this.props;
-    console.log(typeof contentRef);
+    // console.log(typeof contentRef);
 
     return (
       <div className="container__video">

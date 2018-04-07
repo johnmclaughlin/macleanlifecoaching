@@ -57,10 +57,7 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
   }
 
   componentDidMount() {
-    // this.setState({
-    //   moduleWeek: this.props.moduleWeek,
-    //   moduleTitle: this.props.moduleTitle,
-    // });
+
   }
 
   handleTab = (event, value) => {
@@ -70,7 +67,6 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
   handleChange(event) {
     event.preventDefault();
     const { value, id } = event.target;
-    console.log(id, value);
     this.setState(() => ({ [id]: value }));
   }
 
@@ -97,8 +93,6 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
     const modRef = ref.substring(3); // seperates string from 10 characters
     const lessonRef = ref.substring(0, 3);
     const updateModuleContent = firebase.database().ref(`lessons/${lessonRef}/modules/${modRef}`);
-    updateModuleContent.on('value', (snapshot) => {
-    });
     updateModuleContent.update({
       title,
       subtitle,
@@ -111,8 +105,6 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
   handleLessonSubmit(id, week, title ) {  // eslint-disable-line 
     const lessonRef = id.toString().length === 1 ? `w0${id}` : `w${id}`;
     const updateLessonContent = firebase.database().ref(`lessons/${lessonRef}`);
-    updateLessonContent.on('value', (snapshot) => {
-    });
     updateLessonContent.update({
       id,
       title,
@@ -147,156 +139,166 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
               <Tab label="Course Content" />
             </Tabs>
           </AppBar>
-          {value === 0 && <TabContainer>
-            <form className="site_content" onSubmit={this.handleSubmit}>
-              <div>
-                <Card>
-                  <CardContent>
-                    <div>
-                      <TextField className="site_content--input" id="siteTitle" label="Site Title" margin="normal" value={siteTitle} onChange={this.handleChange} />
+          {value === 0 &&
+            <TabContainer>
+              <form className="site_content" onSubmit={this.handleSubmit}>
+                <div>
+                  <Card>
+                    <CardContent>
+                      <div>
+                        <TextField className="site_content--input" id="siteTitle" label="Site Title" margin="normal" value={siteTitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="siteTagline" label="Site Tagline" margin="normal" value={siteTagline} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="supportTitle" label="Support Title" margin="normal" value={supportTitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="supportEmail" label="Support Email" margin="normal" value={supportEmail} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <Button
+                          variant="raised"
+                          color="default"
+                          className="button"
+                          type="submit"
+                        >
+                      Update Site Content
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </form>
+            </TabContainer>}
+          {value === 1 &&
+            <TabContainer>
+              <form className="site_content" onSubmit={this.handleSubmit}>
+                <div>
+                  <Card>
+                    <CardContent>
+                      <div>
+                        <TextField className="site_content--input" id="authTitle" label="Title" margin="normal" value={authTitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="authSubtitle" label="Subtitle" margin="normal" value={authSubtitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="authDescription" label="Description" margin="normal" multiline="true" rows="5" value={authDescription} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="authVideoRef" label="Video Reference" margin="normal" value={authVideoRef} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <Button
+                          variant="raised"
+                          color="default"
+                          className="button"
+                          type="submit"
+                        >
+                      Update Member Content
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </form>
+            </TabContainer>}
+          {value === 2 &&
+            <TabContainer>
+              <form className="site_content" onSubmit={this.handleSubmit}>
+                <div>
+                  <Card>
+                    <CardContent>
+                      <div>
+                        <TextField className="site_content--input" id="contentTitle" label="Non-member Title" margin="normal" value={contentTitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="contentSubtitle" label="Non-member Subtitle" margin="normal" value={contentSubtitle} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="contentDescription" label="Non-member Description" margin="normal" multiline="true" rows="5" value={contentDescription} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <TextField className="site_content--input" id="contentVideoRef" label="Non-member Video Reference" margin="normal" value={contentVideoRef} onChange={this.handleChange} />
+                      </div>
+                      <div>
+                        <Button
+                          variant="raised"
+                          color="default"
+                          className="button"
+                          type="submit"
+                        >
+                          Update Non-member Content
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </form>
+            </TabContainer>}
+          {value === 3 &&
+            <TabContainer>
+              <ul>
+                {this.props.lessons.map((lesson) => {
+                      let lessonRef;
+                      let ref;
+                      if (!lesson.modules) {
+                        lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                        ref = `${lessonRef}m01`;
+                        lesson.modules = { m01: { description: '', ref, subtitle: '', title: '', videoRef: '' } }; // eslint-disable-line
+                      } else {
+                        let newModule = Object.keys(lesson.modules).length + 1;
+                        lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
+                        newModule = newModule < 10 ? newModule = `m0${newModule}` : newModule = `m${newModule}`;
+                        ref = `${lessonRef + newModule}`;
+                      }
+                      const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
+                      const newMod = { description: '', ref, subtitle: '', title: '', videoRef: '' }; // eslint-disable-line
+                        return (
+                          <ExpansionPanel key={lesson.title}>
+                            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                              <Typography>{lesson.title}</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <div className="module_content">
+                                <Card>
+                                  <CardContent>
+                                    <ContentAdminInput
+                                      onSubmit={this.handleLessonSubmit}
+                                      moduleID={lesson.id}
+                                      moduleWeek={lesson.week}
+                                      moduleTitle={lesson.title}
+                                    />
+                                  </CardContent>
+                                </Card>
+                                {mods.map(mod => (
+                                  <ModuleContentInput mod={mod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Update Module" />
+                                  ))
+                                }
+                                <ModuleContentInput mod={newMod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Create New Module" />
+                              </div>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>
+                        );
+                    })}
+                <ExpansionPanel key="new">
+                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography>Add New Module</Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <div className="module_content">
+                      <Card>
+                        <CardContent>
+                          <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleWeek={0} />
+                        </CardContent>
+                      </Card>
                     </div>
-                    <div>
-                      <TextField className="site_content--input" id="siteTagline" label="Site Tagline" margin="normal" value={siteTagline} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="supportTitle" label="Support Title" margin="normal" value={supportTitle} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="supportEmail" label="Support Email" margin="normal" value={supportEmail} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <Button
-                        variant="raised"
-                        color="default"
-                        className="button"
-                        type="submit"
-                      >
-                    Update Site Content
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </form>
-          </TabContainer>}
-          {value === 1 && <TabContainer>
-            <form className="site_content" onSubmit={this.handleSubmit}>
-              <div>
-                <Card>
-                  <CardContent>
-                    <div>
-                      <TextField className="site_content--input" id="authTitle" label="Title" margin="normal" value={authTitle} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="authSubtitle" label="Subtitle" margin="normal" value={authSubtitle} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="authDescription" label="Description" margin="normal" multiline="true" rows="5" value={authDescription} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="authVideoRef" label="Video Reference" margin="normal" value={authVideoRef} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <Button
-                        variant="raised"
-                        color="default"
-                        className="button"
-                        type="submit"
-                      >
-                    Update Member Content
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </form>
-                          </TabContainer>}
-          {value === 2 && <TabContainer>
-            <form className="site_content" onSubmit={this.handleSubmit}>
-              <div>
-                <Card>
-                  <CardContent>
-                    <div>
-                      <TextField className="site_content--input" id="contentTitle" label="Non-member Title" margin="normal" value={contentTitle} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="contentSubtitle" label="Non-member Subtitle" margin="normal" value={contentSubtitle} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="contentDescription" label="Non-member Description" margin="normal" multiline="true" rows="5" value={contentDescription} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <TextField className="site_content--input" id="contentVideoRef" label="Non-member Video Reference" margin="normal" value={contentVideoRef} onChange={this.handleChange} />
-                    </div>
-                    <div>
-                      <Button
-                        variant="raised"
-                        color="default"
-                        className="button"
-                        type="submit"
-                      >
-                        Update Non-member Content
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </form>
-          </TabContainer>}
-          {value === 3 && <TabContainer>
-            <ul>
-              {this.props.lessons.map((lesson) => {
-                    let lessonRef, ref;
-                    if (!lesson.modules) {
-                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
-                      ref = `${lessonRef}m01`;
-                      lesson.modules = { m01: { description: '', ref, subtitle: '', title: '', videoRef: '' } };
-                    } else {
-                      let newModule = Object.keys(lesson.modules).length + 1;
-                      lessonRef = lesson.id.toString().length === 1 ? `w0${lesson.id}` : `w${lesson.id}`;
-                      newModule = newModule < 10 ? newModule = `m0${newModule}` : newModule = `m${newModule}`;
-                      ref = `${lessonRef + newModule}`;
-                    }
-                    const mods = Object.keys(lesson.modules).map(item => lesson.modules[item]);
-                    const newMod = { description: '', ref, subtitle: '', title: '', videoRef: '' };
-                      return (
-                        <ExpansionPanel key={lesson.title}>
-                          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography>{lesson.title}</Typography>
-                          </ExpansionPanelSummary>
-                          <ExpansionPanelDetails>
-                            <div className="module_content">
-                              <Card>
-                                <CardContent>
-                                  <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleID={lesson.id} moduleWeek={lesson.week} moduleTitle={lesson.title} />
-                                </CardContent>
-                              </Card>
-                              {mods.map(mod => (
-                                <ModuleContentInput mod={mod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Update Module" />
-                                ))
-                              }
-                              <ModuleContentInput mod={newMod} modID={lesson.id} onSubmit={this.handleModuleContentSubmit} buttonName="Create New Module" />
-                            </div>
-                          </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                      );
-                  })}
-              <ExpansionPanel key="new">
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>Add New Module</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <div className="module_content">
-                    <Card>
-                      <CardContent>
-                        <ContentAdminInput onSubmit={this.handleLessonSubmit} moduleWeek={0} />
-                      </CardContent>
-                    </Card>
-                  </div>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            </ul>
-          </TabContainer>}
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              </ul>
+            </TabContainer>}
         </div>
       </div>
     );
@@ -304,3 +306,21 @@ class SiteContentAdminInput extends React.Component { // eslint-disable-line rea
 }
 
 export default withStyles(styles)(SiteContentAdminInput);
+
+SiteContentAdminInput.propTypes = {
+  lessons: PropTypes.array.isRequired, // eslint-disable-line
+  classes: PropTypes.object.isRequired, // eslint-disable-line
+  onSubmit: PropTypes.func.isRequired,
+  siteTitle: PropTypes.string.isRequired,
+  siteTagline: PropTypes.string.isRequired,
+  supportTitle: PropTypes.string.isRequired,
+  supportEmail: PropTypes.string.isRequired,
+  authTitle: PropTypes.string.isRequired,
+  authSubtitle: PropTypes.string.isRequired,
+  authDescription: PropTypes.string.isRequired,
+  authVideoRef: PropTypes.string.isRequired,
+  contentTitle: PropTypes.string.isRequired,
+  contentSubtitle: PropTypes.string.isRequired,
+  contentDescription: PropTypes.string.isRequired,
+  contentVideoRef: PropTypes.string.isRequired,
+};

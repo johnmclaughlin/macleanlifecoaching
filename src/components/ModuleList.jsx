@@ -45,10 +45,10 @@ renderList(modules, progress) {
 
   if (this.moduleCount) {
     if (this.moduleCount === this.completeCount) {
-      console.log('fire COMPLETE');
+      // console.log('fire COMPLETE');
       // this.props.handleProgress('complete');
     } else if (this.viewingCount > 0) {
-      console.log('fire VIEWING');
+      // console.log('fire VIEWING');
       // this.props.handleProgress('viewing');
     }
   }
@@ -57,7 +57,7 @@ renderList(modules, progress) {
 
 render() {
   const { modules, progress } = this.props;
-  console.log(typeof modules, typeof progress);
+  // console.log(typeof modules, typeof progress);
 
   return (
     <div className="chapter">
