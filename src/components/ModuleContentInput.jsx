@@ -5,7 +5,6 @@ import Button from 'material-ui-next/Button';
 import Card, { CardContent } from 'material-ui-next/Card';
 import TextEditor from './TextEditor';
 
-
 class ModuleContentInput extends React.Component { // eslint-disable-line react/no-multi-comp
   constructor(props) {
     super(props);
@@ -22,7 +21,7 @@ class ModuleContentInput extends React.Component { // eslint-disable-line react/
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { mod, modID } = this.props;
     this.setState(() => ({
       id: modID,
@@ -43,7 +42,6 @@ class ModuleContentInput extends React.Component { // eslint-disable-line react/
   handleSubmit(event) {
     event.preventDefault();
     const id = event.target.id.value;
-    console.log(event.target);
     this.props.onSubmit(
       id,
       this.state.title,
@@ -97,3 +95,10 @@ class ModuleContentInput extends React.Component { // eslint-disable-line react/
 }
 
 export default ModuleContentInput;
+
+ModuleContentInput.propTypes = {
+  mod: PropTypes.object.isRequired, // eslint-disable-line
+  modID: PropTypes.number.isRequired,
+  buttonName: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};

@@ -1,66 +1,53 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import YouTube from 'react-youtube';
 import firebase from './firebase';
 
-// export default class YouTube extends React.Component {
-//     render() {
-//     var videoSrc = "https://www.youtube.com/embed/" +
-//         this.props.video + "?autoplay=" +
-//         this.props.autoplay + "&rel=" +
-//         this.props.rel + "&modestbranding=" +
-//         this.props.modest;
-//     return (
-//       <div className="container__video">
-//         <iframe className="player" type="text/html" width="100%" height="100%" src={videoSrc} frameBorder="0"/>
-//       </div>
-//     );
-//   }
-// }
 export default class VideoPlayer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          currentItem: '',
-        };
-        this._onPlay = this._onPlay.bind(this);
-        this._onEnd = this._onEnd.bind(this);
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+    this.onPlay = this.onPlay.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+  }
 
-    _onReady(event) {
-        event.target.pauseVideo();
-    }
+  componentWillMount() {
+    const { contentRef } = this.props;
+  }
 
-    _onPause(event) {
-        //console.log('Video Paused', this.contentRef);
-    }
+  onReady(event) {
+    event.target.pauseVideo();
+  }
 
-    _onPlay(event) {
-        // Record module and set state to In Progress
-        const userID = this.props.user.uid;
-        const module = event.target.a.id;
-        const recordModule = firebase.database().ref(`users/s${userID}/module`);
-        recordModule.on('value', (snapshot) => {
-            const record = snapshot.val();
-            if (record[module] !== 'complete') {
-                recordModule.update({
-                [module]: 'viewing',
-            });
-            }
-        });
-    }
+  onPause(event) {
+    // console.log('Video Paused', this.contentRef);
+  }
 
-    _onEnd(event) {
-        // Update module to Complete
-        const userID = this.props.user.uid;
-        const module = event.target.a.id;
-        const recordModule = firebase.database().ref(`users/s${userID}/module/`);
-        recordModule.on('value', (snapshot) => {
-        });
-
+  onPlay(event) {
+    // Record module and set state to In Progress
+    const userID = this.props.user.uid;
+    const module = event.target.a.id;
+    const recordModule = firebase.database().ref(`users/s${userID}/module`);
+    recordModule.on('value', (snapshot) => {
+      const record = snapshot.val();
+      if (record[module] !== 'complete') {
         recordModule.update({
-            [module]: 'complete',
+          [module]: 'viewing',
         });
-    }
+      }
+    });
+  }
+
+  onEnd(event) {
+    // Update module to Complete
+    const { uid } = this.props.user;
+    const module = event.target.a.id;
+    const recordModule = firebase.database().ref(`users/s${uid}/module/`);
+    recordModule.update({
+      [module]: 'complete',
+    });
+  }
 
   render() {
     const opts = {
@@ -73,21 +60,34 @@ export default class VideoPlayer extends React.Component {
       },
     };
 
-    const { contentRef, user } = this.props;
+    // const { contentRef } = this.props;
+    console.log(typeof contentRef);
 
     return (
       <div className="container__video">
         <YouTube
           videoId={this.props.video}
           opts={opts}
-          onReady={this._onReady}
-          onPause={this._onPause}
-          onPlay={this._onPlay}
-          onEnd={this._onEnd}
-          name={contentRef}
-          id={contentRef}
+          onReady={this.onReady}
+          onPause={this.onPause}
+          onPlay={this.onPlay}
+          onEnd={this.onEnd}
+          name={this.contentRef}
+          id={this.contentRef}
         />
       </div>
     );
   }
 }
+
+VideoPlayer.defaultProps = {
+  contentRef: 'temp',
+};
+
+VideoPlayer.propTypes = {
+  video: PropTypes.string.isRequired,
+  modules: PropTypes.object.isRequired, // eslint-disable-line
+  progress: PropTypes.object.isRequired, // eslint-disable-line
+  user: PropTypes.object.isRequired, // eslint-disable-line
+  contentRef: PropTypes.string, // eslint-disable-line
+};

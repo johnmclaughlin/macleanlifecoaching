@@ -4,8 +4,6 @@ import { withStyles } from 'material-ui-next/styles';
 import Typography from 'material-ui-next/Typography';
 import Modal from 'material-ui-next/Modal';
 
-/* BEGIN SUPPORT MODAL */
-
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -57,7 +55,11 @@ const SimpleModal = (props) => {
 };
 
 SimpleModal.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired, // eslint-disable-line
+  supportEmail: PropTypes.string.isRequired,
+  supportTitle: PropTypes.string.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
 // We need an intermediary variable for handling the recursive nesting.

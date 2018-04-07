@@ -42,7 +42,6 @@ nav {
   
   & > div:first-of-type {
     background: white;
-    // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
     border-radius: 2px;
   }
   ul {
@@ -161,14 +160,6 @@ header .desktop {
 
   h1 {
     padding: 20px;
-  }
-  
-
-  &.user {
-
-  }
-  &.content {
-
   }
 }
 

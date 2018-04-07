@@ -1,14 +1,12 @@
 import React from 'react';
 import List, { ListItem, ListItemText, ListItemIcon } from 'material-ui-next/List';
+import PropTypes from 'prop-types';
 
 export default class ModuleList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     };
-    let completeCount;
-    let viewingCount;
-    const moduleCount = [];
   }
 
   componentDidMount() {
@@ -34,18 +32,17 @@ renderList(modules, progress) {
       if (progress[ref] === 'viewing') {
         status = 'play_circle_outline';
         classes = 'material-icons viewing';
-        this.viewingCount++;
+        this.viewingCount += 1;
       } else if (progress[ref] === 'complete') {
         status = 'check';
         classes = 'material-icons complete';
-        this.completeCount++;
+        this.completeCount += 1;
       }
     }
 
-    console.log('moduleCount', this.moduleCount, 'completeCount', this.completeCount);
     list.push(<ListItem key={k} onClick={() => this.handleModChange({ val })}><ListItemText primary={title} /><ListItemIcon><i className={classes}>{status}</i></ListItemIcon></ListItem>);
   });
-  //console.log('modules', this.moduleCount, 'completes', this.completeCount, 'viewing', this.viewingCount);
+
   if (this.moduleCount) {
     if (this.moduleCount === this.completeCount) {
       console.log('fire COMPLETE');
@@ -60,6 +57,7 @@ renderList(modules, progress) {
 
 render() {
   const { modules, progress } = this.props;
+  console.log(typeof modules, typeof progress);
 
   return (
     <div className="chapter">
@@ -70,4 +68,10 @@ render() {
   );
 }
 }
+
+ModuleList.propTypes = {
+  onSelectModule: PropTypes.func.isRequired,
+  modules: PropTypes.object.isRequired, // eslint-disable-line
+  progress: PropTypes.object.isRequired, // eslint-disable-line
+};
 
