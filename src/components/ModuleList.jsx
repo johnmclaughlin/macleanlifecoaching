@@ -22,16 +22,13 @@ handleModChange = (val) => {
 renderList(modules, progress) {
   this.moduleCount = Object.keys(modules).length;
   const list = [];
-  for (const k in modules) {
+  Object.keys(modules).forEach((k) => {
     const val = modules[k];
-    const title = val.title;
-    const ref = val.ref;
+    const { title, ref } = val;
     let status;
     let classes;
     this.completeCount = 0;
     this.viewingCount = 0;
-
-    console.log('k', k);
 
     if (progress && progress.hasOwnProperty(ref)) {
       if (progress[ref] === 'viewing') {
@@ -47,7 +44,7 @@ renderList(modules, progress) {
 
     console.log('moduleCount', this.moduleCount, 'completeCount', this.completeCount);
     list.push(<ListItem key={k} onClick={() => this.handleModChange({ val })}><ListItemText primary={title} /><ListItemIcon><i className={classes}>{status}</i></ListItemIcon></ListItem>);
-  }
+  });
   //console.log('modules', this.moduleCount, 'completes', this.completeCount, 'viewing', this.viewingCount);
   if (this.moduleCount) {
     if (this.moduleCount === this.completeCount) {

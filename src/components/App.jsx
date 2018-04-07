@@ -3,6 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router';
 import Moment from 'moment';
+import PropTypes from 'prop-types';
 import firebase, { auth, provider } from './firebase';
 import SignInScreen from './FirebaseAuth';
 import ProgramMenu from './ProgramMenu';
@@ -28,6 +29,23 @@ class ActivateAccount extends React.Component { // eslint-disable-line
     );
   }
 }
+
+ActivateAccount.defaultProps = {
+  match: {
+    param: {
+      id: 'abcdef',
+    },
+  },
+};
+
+ActivateAccount.propTypes = {
+  setRYET: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      ryet: PropTypes.string.isRequired,
+    }),
+  }),
+};
 
 class App extends Component {  // eslint-disable-line
   constructor(props) {
@@ -149,7 +167,7 @@ class App extends Component {  // eslint-disable-line
   login() {
     auth.signInWithPopup(provider)
       .then((result) => {
-        const user = result.user;
+        const { user } = result;
         this.setState({
           user,
           username: user.username,
@@ -176,14 +194,15 @@ class App extends Component {  // eslint-disable-line
     lessonsRef.on('value', (snapshot) => {
       const lessons = snapshot.val();
       const newState = [];
-      for (const lesson in lessons) {
+      Object.keys(lessons).forEach((lesson) => {
         newState.push({
           id: lessons[lesson].id,
           title: lessons[lesson].title,
           week: lessons[lesson].week,
           modules: lessons[lesson].modules,
         });
-      }
+      });
+
       this.setState({
         lessons: newState,
         module: {
