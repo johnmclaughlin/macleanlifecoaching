@@ -16,8 +16,7 @@ const muiTheme = getMuiTheme({
   },
 });
 
-class ActivateAccount extends React.Component { // eslint-disable-line
-
+class ActivateAccount extends React.Component {
   componentDidMount() {
     const { ryet } = this.props.match.params;
     this.props.setRYET(ryet);

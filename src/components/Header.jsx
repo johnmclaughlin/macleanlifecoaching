@@ -31,7 +31,7 @@ const menuButton = {
   marginRight: 20,
 };
 
-export default class Header extends React.Component { // eslint-disable-line react/no-multi-comp
+export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -192,28 +192,28 @@ export default class Header extends React.Component { // eslint-disable-line rea
             <div className="controls">
               <div className="controls__user">
                 <Tooltip id="tooltip-home" className="tooltips" title="Home">
-                  <IconButton><i className="material-icons toolbar" onClick={this.props.resetContent}>home</i></IconButton>
+                  <IconButton><i className="material-icons toolbar" onClick={this.props.resetContent} onKeyDown={this.props.resetContent} role="button" tabIndex={0}>home</i></IconButton>
                 </Tooltip>
                 <Tooltip id="tooltip-help" className="tooltips" title="Help">
-                  <IconButton><i className="material-icons toolbar" onClick={this.handleOpenModal}>help</i></IconButton>
+                  <IconButton><i className="material-icons toolbar" onClick={this.handleOpenModal} onKeyDown={this.handleOpenModal} role="button" tabIndex={0}>help</i></IconButton>
                 </Tooltip>
                 {this.props.user ?
                   <Tooltip id="tooltip-logout" className="tooltips" title="Logout">
-                    <IconButton><i className="material-icons toolbar" onClick={this.props.logout}>account_circle</i></IconButton>
+                    <IconButton><i className="material-icons toolbar" onClick={this.props.logout} onKeyDown={this.props.logout} role="button" tabIndex={0}>account_circle</i></IconButton>
                   </Tooltip>
                     :
                   <Tooltip id="tooltip-login" className="tooltips" title="Login">
-                    <IconButton><i className="material-icons toolbar" style={{ opacity: 0.5 }} onClick={this.props.login}>account_circle</i></IconButton>
+                    <IconButton><i className="material-icons toolbar" style={{ opacity: 0.5 }} onClick={this.props.login} onKeyDown={this.props.login} role="button" tabIndex={0}>account_circle</i></IconButton>
                   </Tooltip>
                     }
               </div>
               {this.props.role === 'admin' && // need to load user data
               <div className="controls__admin">
                 <Tooltip id="tooltip-user" className="tooltips" title="User Administration">
-                  <IconButton><i className="material-icons toolbar" onClick={this.toggleDrawer('user', true)}>supervisor_account</i></IconButton>
+                  <IconButton><i className="material-icons toolbar" onClick={this.toggleDrawer('user', true)} onKeyDown={this.toggleDrawer('user', true)} role="button" tabIndex={0}>supervisor_account</i></IconButton>
                 </Tooltip>
                 <Tooltip id="tooltip-content" className="tooltips" title="Content Administration">
-                  <IconButton><i className="material-icons toolbar" onClick={this.toggleDrawer('content', true)}>video_library</i></IconButton>
+                  <IconButton><i className="material-icons toolbar" onClick={this.toggleDrawer('content', true)} onKeyDown={this.toggleDrawer('content', true)} role="button" tabIndex={0}>video_library</i></IconButton>
                 </Tooltip>
               </div>
                     }
@@ -256,7 +256,6 @@ export default class Header extends React.Component { // eslint-disable-line rea
         <Hidden mdUp>
           <Drawer
             type="temporary"
-                    // anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={this.state.mobileOpen}
             classes={{
                         paper: classes.drawerPaper,
@@ -278,7 +277,11 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line
   allUsers: PropTypes.object.isRequired, // eslint-disable-line
   lessons: PropTypes.array.isRequired, // eslint-disable-line
+  user: PropTypes.object.isRequired, // eslint-disable-line
   onSelectModule: PropTypes.func.isRequired,
+  resetContent: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
   siteTitle: PropTypes.string.isRequired,
   siteTagline: PropTypes.string.isRequired,
   supportTitle: PropTypes.string.isRequired,
