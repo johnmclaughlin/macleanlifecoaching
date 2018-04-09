@@ -7,13 +7,10 @@ export default class VideoPlayer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentItem: '',
     };
     this.onPlay = this.onPlay.bind(this);
     this.onEnd = this.onEnd.bind(this);
-  }
-
-  componentWillMount() {
-    const { contentRef } = this.props;
   }
 
   onReady(event) {
@@ -26,9 +23,9 @@ export default class VideoPlayer extends React.Component {
 
   onPlay(event) {
     // Record module and set state to In Progress
-    const userID = this.props.user.uid;
+    const { uid } = this.props.user;
     const module = event.target.a.id;
-    const recordModule = firebase.database().ref(`users/s${userID}/module`);
+    const recordModule = firebase.database().ref(`users/s${uid}/module`);
     recordModule.on('value', (snapshot) => {
       const record = snapshot.val();
       if (record[module] !== 'complete') {
@@ -60,8 +57,7 @@ export default class VideoPlayer extends React.Component {
       },
     };
 
-    // const { contentRef } = this.props;
-    // console.log(typeof contentRef);
+    const { contentRef } = this.props;
 
     return (
       <div className="container__video">
@@ -72,17 +68,13 @@ export default class VideoPlayer extends React.Component {
           onPause={this.onPause}
           onPlay={this.onPlay}
           onEnd={this.onEnd}
-          name={this.contentRef}
-          id={this.contentRef}
+          name={contentRef}
+          id={contentRef}
         />
       </div>
     );
   }
 }
-
-VideoPlayer.defaultProps = {
-  contentRef: 'temp',
-};
 
 VideoPlayer.propTypes = {
   video: PropTypes.string.isRequired,
@@ -91,3 +83,4 @@ VideoPlayer.propTypes = {
   user: PropTypes.object.isRequired, // eslint-disable-line
   contentRef: PropTypes.string, // eslint-disable-line
 };
+
